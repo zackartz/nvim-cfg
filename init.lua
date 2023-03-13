@@ -30,7 +30,7 @@ vim.o.tabstop = 2
 
 require("lazy").setup("plugins")
 
--- vim.cmd.colorscheme("catppuccin")
+vim.cmd.colorscheme("ayu-dark")
 
 require("noice").setup({
   lsp = {
@@ -137,7 +137,7 @@ vim.keymap.set("n", "<c-f>", function()
 end, { silent = true, expr = true })
 
 vim.keymap.set("n", "<c-b>", function()
-  if not require("noice.lsp").scroll(-4) then
+  if not require("noice.lsp").scroll( -4) then
     return "<c-b>"
   end
 end, { silent = true, expr = true })
@@ -203,35 +203,6 @@ vim.api.nvim_create_autocmd("TextYankPost", {
   pattern = "*",
 })
 
--- Set lualine as statusline
--- See `:help lualine.txt`
-
-require("lualine").setup({
-  sections = {
-    lualine_x = {
-      {
-        require("noice").api.status.message.get_hl,
-        cond = require("noice").api.status.message.has,
-      },
-      {
-        require("noice").api.status.command.get,
-        cond = require("noice").api.status.command.has,
-        color = { fg = "#ff9e64" },
-      },
-      {
-        require("noice").api.status.mode.get,
-        cond = require("noice").api.status.mode.has,
-        color = { fg = "#ff9e64" },
-      },
-      {
-        require("noice").api.status.search.get,
-        cond = require("noice").api.status.search.has,
-        color = { fg = "#ff9e64" },
-      },
-    },
-  },
-})
-
 -- Enable Comment.nvim
 require("Comment").setup()
 
@@ -295,12 +266,17 @@ vim.keymap.set("n", "<leader>sw", require("telescope.builtin").grep_string, { de
 vim.keymap.set("n", "<leader>sg", require("telescope.builtin").live_grep, { desc = "[S]earch by [G]rep" })
 vim.keymap.set("n", "<leader>sd", require("telescope.builtin").diagnostics, { desc = "[S]earch [D]iagnostics" })
 
+-- Neovide settings
+
+vim.opt.guifont = { "BlexMono Nerd Font", "h13" }
+
+vim.g.neovide_refresh_rate = 240
+
 -- [[ Configure Treesitter ]]
 -- See `:help nvim-treesitter`
 require("nvim-treesitter.configs").setup({
   -- Add languages to be installed here that you want installed for treesitter
   ensure_installed = { "c", "cpp", "go", "lua", "python", "rust", "typescript", "help", "vim" },
-
   highlight = { enable = true },
   indent = { enable = true, disable = { "python" } },
   incremental_selection = {
@@ -436,8 +412,7 @@ local servers = {
   -- pyright = {},
   rust_analyzer = {},
   tsserver = {},
-
-  sumneko_lua = {
+  lua_ls = {
     Lua = {
       workspace = { checkThirdParty = false },
       telemetry = { enable = false },
@@ -478,7 +453,7 @@ mason_lspconfig.setup_handlers({
   end,
 })
 
-require("lspconfig")["sumneko_lua"].setup({
+require("lspconfig")["lua_ls"].setup({
   capabilities = capabilities,
   on_attach = on_attach,
   settings = {
@@ -522,7 +497,7 @@ cmp.setup({
     end,
   },
   mapping = cmp.mapping.preset.insert({
-    ["<C-d>"] = cmp.mapping.scroll_docs(-4),
+    ["<C-d>"] = cmp.mapping.scroll_docs( -4),
     ["<C-f>"] = cmp.mapping.scroll_docs(4),
     ["<C-Space>"] = cmp.mapping.complete(),
     ["<CR>"] = cmp.mapping.confirm({
@@ -541,8 +516,8 @@ cmp.setup({
     ["<S-Tab>"] = cmp.mapping(function(fallback)
       if cmp.visible() then
         cmp.select_prev_item()
-      elseif luasnip.jumpable(-1) then
-        luasnip.jump(-1)
+      elseif luasnip.jumpable( -1) then
+        luasnip.jump( -1)
       else
         fallback()
       end
@@ -570,7 +545,9 @@ cmp.setup({
 
 -- Set colorscheme
 vim.o.termguicolors = true
-vim.cmd.colorscheme("catppuccin")
+-- vim.cmd.colorscheme("catppuccin-mocha")
+
+-- require("user.colorscheme")
 
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et
